@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  #сервис PostgreSQL
+  postgres:
+    image: postgres:15
+    container_name: phonebook_postgres
+    environment:
+      POSTGRES_DB: phonebook
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: unless-stopped
+    networks:
+      - phonebook_network
+
+  #сервис pgAdmin для управления БД
+  pgadmin:
+    image: dpage/pgadmin4:7
+    container_name: phonebook_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@phonebook.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - phonebook_network
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+#тома для хранения данных
+volumes:
+  postgres_data:
+  pgadmin_data:
+
+#внутренняя сеть для связи контейнеров
+networks:
+  phonebook_network:
+    driver: bridge
