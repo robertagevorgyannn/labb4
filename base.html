@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📞 Телефонная книга</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f2e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #fff5f5;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(180, 130, 130, 0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #d9b3b3;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.2em;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+        
+        .flash {
+            padding: 12px 18px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .flash.success {
+            background: #e6d9d9;
+            color: #8b6b6b;
+            border-left: 4px solid #b38686;
+        }
+        
+        .flash.error {
+            background: #f0d9d9;
+            color: #a66a6a;
+            border-left: 4px solid #cc9999;
+        }
+        
+        .btn {
+            padding: 10px 22px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            font-weight: 400;
+        }
+        
+        .btn-primary {
+            background: #d9b3b3;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #c9a3a3;
+            transform: translateY(-1px);
+        }
+        
+        .btn-success {
+            background: #bfa0a0;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #af9090;
+            transform: translateY(-1px);
+        }
+        
+        .btn-danger {
+            background: #cc9999;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #bc8989;
+            transform: translateY(-1px);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #a67a7a;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e6cccc;
+            border-radius: 6px;
+            font-size: 15px;
+            background: white;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #d9b3b3;
+            box-shadow: 0 0 0 3px rgba(217, 179, 179, 0.1);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ecd9d9;
+        }
+        
+        th {
+            background: #f2e0e0;
+            font-weight: 500;
+            color: #a67a7a;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        tr:hover {
+            background: #faf0f0;
+        }
+        
+        .contact-name {
+            font-weight: 500;
+            color: #8f6b6b;
+        }
+        
+        .contact-phone {
+            color: #b38686;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        
+        .contact-note {
+            color: #bfa0a0;
+            font-style: italic;
+            font-size: 14px;
+        }
+        
+        .actions-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 10px;
+            flex: 1;
+            max-width: 500px;
+        }
+        
+        .search-box input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ecd9d9;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: #d9b3b3;
+            box-shadow: 0 0 0 3px rgba(217, 179, 179, 0.1);
+        }
+        
+        .search-box button {
+            padding: 12px 25px;
+            background: #d9b3b3;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .search-box button:hover {
+            background: #c9a3a3;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn-edit, .btn-delete {
+            padding: 6px 14px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .btn-edit {
+            background: #d9b3b3;
+            color: white;
+        }
+        
+        .btn-edit:hover {
+            background: #c9a3a3;
+        }
+        
+        .btn-delete {
+            background: #cc9999;
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background: #bc8989;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 50px;
+            color: #bfa0a0;
+        }
+        
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            fill: #ecd9d9;
+            margin-bottom: 20px;
+        }
+        
+        .search-info {
+            margin-bottom: 20px;
+            padding: 12px 18px;
+            background: #f2e0e0;
+            border-radius: 6px;
+            color: #8f6b6b;
+            font-size: 14px;
+        }
+        
+        .search-info a {
+            color: #b38686;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+        
+        .search-info a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .actions-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                max-width: 100%;
+            }
+            
+            table {
+                font-size: 13px;
+            }
+            
+            th, td {
+                padding: 10px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📞 телефонная книга</h1>
+        </div>
+        
+        <div class="content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash {{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</body>
+</html>
