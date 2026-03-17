@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
 Веб-интерфейс телефонной книги (Flask + PostgreSQL)
+Это веб-приложение на Flask. Оно предоставляет графический интерфейс в браузере для просмотра, добавления, редактирования и удаления контактов.
 """
 
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
