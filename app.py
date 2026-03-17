@@ -12,7 +12,7 @@ import re
 app = Flask(__name__)
 app.secret_key = 'phonebook-secret-key-2024'
 
-# Настройки подключения к БД
+#настройки подключения к БД
 DB_CONFIG = {
     'dbname': 'phonebook',
     'user': 'admin',
@@ -27,10 +27,9 @@ def format_phone(phone):
     if not phone:
         return phone
     
-    # Удаляем все нецифровые символы
     digits = ''.join(filter(str.isdigit, phone))
     
-    # Форматируем в зависимости от длины
+    #форматируем в зависимости от длины
     if len(digits) == 11 and digits.startswith('7'):
         return f"+7 ({digits[1:4]}) {digits[4:7]}-{digits[7:9]}-{digits[9:11]}"
     elif len(digits) == 10:
